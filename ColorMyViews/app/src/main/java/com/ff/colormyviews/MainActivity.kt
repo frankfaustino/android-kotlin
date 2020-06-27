@@ -10,6 +10,9 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import kotlinx.android.synthetic.main.activity_main.*
 
+/**
+ * ColorMyViews app demonstrates how to use ConstraintLayout.
+ */
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,6 +21,9 @@ class MainActivity : AppCompatActivity() {
         setListeners()
     }
 
+    /**
+     * Attaches listeners to all the views.
+     */
     private fun setListeners() {
         val boxOneText = findViewById<TextView>(R.id.box_one_text)
         val boxTwoText = findViewById<TextView>(R.id.box_two_text)
@@ -48,6 +54,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Sets the background color of a view depending on its resource id.
+     * This is a way of using one click handler to do similar operations on a group of views.
+     */
     @RequiresApi(Build.VERSION_CODES.M)
     private fun makeColored(view: View) {
         when (view.id) {
