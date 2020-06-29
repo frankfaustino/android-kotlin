@@ -6,6 +6,19 @@ screens. Each screen is implemented as a fragment.
 
 The app navigates using buttons, the app bar, and a navigation drawer.
 
+***
+
+## Contents
+
+ - [Fragments](#fragments)
+   - [Fragment Lifecycle](#fragment-lifecycle)
+ - [Navigation](#navigation-components)
+   - [Back Button](#the-back-button)
+   - [Up Button](#the-up-button)
+   - [Options Menu](#the-options-menu)
+   - [Navigation Drawer](#the-navigation-drawer)
+   - [Resources](#navigation-resources)
+
 ## Fragments
 
 A fragment represents a behavior or a portion of UI in an activity. You can combine multiple fragments in a single activity to build a multi-panel UI, and you can reuse a fragment in multiple activities.
@@ -168,7 +181,7 @@ override fun onSupportNavigateUp(): Boolean {
 }
 ```
 
-### Resources
+### Navigation resources
 
 Android developer documentation:
 
@@ -187,3 +200,33 @@ Material Design documentation:
 - [Understanding navigation](https://material.io/design/navigation/understanding-navigation.html#)
 - [App bars: top](https://material.io/design/components/app-bars-top.html#)
 - [Navigation drawer](https://material.io/design/components/navigation-drawer.html)
+
+## Safe Args
+
+- To help catch errors caused by missing keys or mismatched types when you pass data from one fragment to another, use the [Safe Args](https://developer.android.com/topic/libraries/architecture/navigation/navigation-pass-data#Safe-args) Gradle plugin.
+- For each fragment in your app, Safe Args generates a corresponding `NavDirection` class. You can use the class to pass arguments between fragments.
+- `NavDirection` represent navigation from all the app's actions.
+
+### Implicit intents
+
+- An [implicit intent](https://developer.android.com/training/basics/intents/sending) declares an action that your app wants some other app (e.g., camera or email) to perform on its behalf.
+- If several Android apps could handle an implicit intent, Android shows the user a chooser, which prompts the user which app they want to use.
+- To build an intent, declare an action to perform, for example [`ACTION_SEND`](https://developer.android.com/reference/android/content/Intent.html#ACTION_SEND).
+- Several [`Intent()`](https://developer.android.com/reference/android/content/Intent.html#public-constructors_1) constructors are available to help build intents.
+
+### Sharing functionality
+
+- [`Intent.ACTION_SEND`](https://developer.android.com/reference/android/content/Intent.html#ACTION_SEND) delivers some data to someone else.
+
+### Options menu
+
+- To add an options menu to a fragment, set the `setHasOptionsMenu()` method to `true`.
+- Override the `onCreateOptionsMenu()` method to inflate the menu.
+- Override the `onOptionsItemSelected()` to run code when a menu item is selected.
+
+### Safe Args resources
+
+- [Use Safe Args to pass data with type safety](https://developer.android.com/topic/libraries/architecture/navigation/navigation-pass-data#Safe-args)
+- [`Bundle`](https://developer.android.com/reference/android/os/Bundle.html)
+- [`Intent`](https://developer.android.com/reference/android/content/Intent)
+- [Sending the User to Another App](https://developer.android.com/training/basics/intents/sending)

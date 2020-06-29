@@ -4,7 +4,7 @@ When an app has complex view hierarchies, `findViewById()` is expensive and slow
 
 One solution is to create an object that contains a reference to each view. This object, called a `Binding` object, can be used by your whole app. This technique is called *data binding*.
 
-![with Data Binding](204bd94c4dd5dd37.jpg)
+![with Data Binding](204bd94c4dd5dd37.jpeg)
 
 ### Benefits
 
