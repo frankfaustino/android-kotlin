@@ -8,6 +8,10 @@ You will modify the app to use Architecture components and best practices.
 - [ViewModel](#viewmodel)
 - [ViewModelFactory](#viewmodelfactory)
 - [LiveData](#livedata)
+- [Observer Pattern](#observer-pattern)
+- [ViewModel Data Binding](#viewmodel-data-binding)
+  - [Listener bindings](#listener-bindings)
+- [Adding LiveData to data binding](#adding-livedata-to-data-binding)
 - [Resources](#resources)
 
 ## Summary
@@ -57,6 +61,51 @@ viewModel.word.observe(viewLifecycleOwner, Observer { newWord -> binding.wordTex
 The *observer pattern* specifies communication between objects: an *observable* (the "subject" of observation) and *observers*. An observable is an object that notifies observers about the changes in its state.
 ![b608df5e5e5fa4f8.png](b608df5e5e5fa4f8.png)
 
+## ViewModel Data Binding
+
+- You can associate a `ViewModel` with a layout by using data binding
+- `ViewModel` objects hold the UI data. By passing `ViewModel` objects into the data binding, you can automate some of the communication between the views and the `ViewModel` objects.
+
+- In the layout file, add a data binding variable of the type `ViewModel`
+```xml
+<data>
+    <variable
+        name="gameViewModel"
+        type="com.example.android.guesstheword.screens.game.GameViewModel" />
+</data>
+```
+
+- In the `GameFragment` file, pass the `GameViewModel` into the data binding
+```kotlin
+binding.gameViewModel = viewModel
+```
+
+### Listener bindings
+
+- [*Listener bindings*](https://developer.android.com/topic/libraries/data-binding/expressions#listener_bindings) are binding expressions in the layout that run when click events such as `onClick()` are triggered
+- Listener bindings are written as lambda expressions
+- Replace the click listeners in the UI controllers with listener bindings in the layout file
+- Data binding creates a listener and sets the listener on the view
+
+```xml
+<Button android:onClick="@{() -> gameViewModel.onSkip()}" />
+```
+
+## Adding LiveData to data binding
+
+- `LiveData` objects can be used as a data binding source to automatically notify the UI about changes in the data
+- You can bind the view directly to the `LiveData` object in the `ViewModel`. When the `LiveData` in the `ViewModel` changes, the views in the layout can be automatically update, without the observer methods in the UI controllers
+
+```xml
+<TextView android:text="@{gameViewModel.word}" />
+```
+
+- To make the `LiveData` data binding work, set the current activity as the lifecycle owner of the `binding` variable in the UI controller
+
+```kotlin
+binding.lifecycleOwner = viewLifecycleOwner
+```
+
 ## Resources
 
 - [`ViewModel` Overview](https://developer.android.com/topic/libraries/architecture/viewmodel)
@@ -67,6 +116,9 @@ The *observer pattern* specifies communication between objects: an *observable* 
 
 - [`LiveData` Overview](https://developer.android.com/topic/libraries/architecture/livedata)
 - [`MutableLiveData`](https://developer.android.com/reference/android/arch/lifecycle/MutableLiveData)
+
+- [Bind layout views to Architecture Components](https://developer.android.com/topic/libraries/data-binding/architecture)
+- [Listener bindings](https://developer.android.com/topic/libraries/data-binding/expressions#listener_bindings)
 
 - [MVVM](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel) (model-view-viewmodel) architectural pattern.
 - [Separation of concerns](https://en.wikipedia.org/wiki/Separation_of_concerns) (SoC) design principle
