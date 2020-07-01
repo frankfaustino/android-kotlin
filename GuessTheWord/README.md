@@ -7,6 +7,7 @@ You will modify the app to use Architecture components and best practices.
 - [Summary](#summary)
 - [ViewModel](#viewmodel)
 - [ViewModelFactory](#viewmodelfactory)
+- [LiveData](#livedata)
 - [Resources](#resources)
 
 ## Summary
@@ -35,6 +36,27 @@ The `ViewModel` class stores and manages UI-related data. It allows data to surv
 
 `ViewModelProvider.Factory` is an interface used to create a `ViewModel` object.
 
+## LiveData
+
+`LiveData` lets you build data objects that notify views when the underlying database changes.
+
+The use the `LiveData` class, set up "observers" (e.g., activities or fragments) that observe changes in the app's data. `LiveData` is lifecycle-aware, so it only updates app-component observers that are in an active lifecycle state.
+
+- `LiveData` is observable, which means that an [`Observer`](https://developer.android.com/reference/android/arch/lifecycle/Observer.html) is notified when the data held by the `LiveData` object changes
+- `LiveData` holds data; `LiveData` is a wrapper that can be used with any data
+- `LiveData` is lifecycle-aware. When you attach an observer to the `LiveData`, the observer is associated with a [`LifecycleOwner`](https://developer.android.com/topic/libraries/architecture/lifecycle#lco) (usually an activity or fragment). The `LiveData` only updates observers that are in an active lifecycle state such as [`STARTED`](https://developer.android.com/reference/android/arch/lifecycle/Lifecycle.State.html#STARTED) or [`RESUMED`](https://developer.android.com/reference/android/arch/lifecycle/Lifecycle.State.html#RESUMED).
+
+```kotlin
+val viewModel: GameViewModel = ViewModelProvider(this).get(GameViewModel::class.java)
+viewModel.score.observe(viewLifecycleOwner, Observer { newScore -> binding.scoreText.text = newScore.toString() })
+viewModel.word.observe(viewLifecycleOwner, Observer { newWord -> binding.wordText.text = newWord.toString() })
+```
+
+## Observer pattern
+
+The *observer pattern* specifies communication between objects: an *observable* (the "subject" of observation) and *observers*. An observable is an object that notifies observers about the changes in its state.
+![b608df5e5e5fa4f8.png](b608df5e5e5fa4f8.png)
+
 ## Resources
 
 - [`ViewModel` Overview](https://developer.android.com/topic/libraries/architecture/viewmodel)
@@ -42,6 +64,9 @@ The `ViewModel` class stores and manages UI-related data. It allows data to surv
 - [Guide to app architecture](https://developer.android.com/jetpack/docs/guide)
 - [`ViewModelProvider`](https://developer.android.com/reference/android/arch/lifecycle/ViewModelProvider)
 - [`ViewModelProvider.Factory`](https://developer.android.com/reference/android/arch/lifecycle/ViewModelProvider.Factory)
+
+- [`LiveData` Overview](https://developer.android.com/topic/libraries/architecture/livedata)
+- [`MutableLiveData`](https://developer.android.com/reference/android/arch/lifecycle/MutableLiveData)
 
 - [MVVM](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel) (model-view-viewmodel) architectural pattern.
 - [Separation of concerns](https://en.wikipedia.org/wiki/Separation_of_concerns) (SoC) design principle
