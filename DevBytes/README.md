@@ -48,17 +48,52 @@ A repository module handles data operations and allows you to use multiple backe
 
 ## WorkManager
 
+`WorkManager` API makes it easy to schedule deferrable, asynchronous tasks that must be run reliably.
+
 ### Worker
 
 A class that performs synchronously on a background thread provided by `WorkManager` 
 
 ### WorkRequest
 
-`WorkRequest` class represents a request to run the worker in the background. Use `WorkRequest` to configure how and when to run the worker task, with the help of `Constraints` such as device plugged in or Wi-Fi connected. 
+`WorkRequest` class represents a request to run the worker in the background. Use `WorkRequest` to configure how and when to run the worker task, with the help of `Constraints` such as device plugged in or Wi-Fi connected.
+
+There are two implementations of `WorkRequest`:
+- [`OneTimeWorkRequest`]() for one-off tasks
+- [`PeriodicWorkRequest`]() for periodic work requests
+
+#### Constraints
+
+You can specify [`Constraints`]() indicating when the `Worker` should run. Constraints include things like whether the device is plugged in, idle, or whether Wi-Fi is connected.
+
+```kotlin
+val constraints = Constraints.Builder()
+        .setRequiredNetworkType(NetworkType.UNMETERED)
+        .setRequiresBatteryNotLow(true)
+        .setRequiresCharging(true)
+        .apply {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                setRequiresDeviceIdle(true)
+            }
+        }
+        .build()
+```
 
 ### WorkManager
 
 Schedules the `WorkRequest` in a way that spreads out the load on system resources, while honoring the specified constraints.
+
+```kotlin
+val repeatingRequest = PeriodicWorkRequestBuilder<RefreshDataWorker>(1, TimeUnit.DAYS)
+        .setConstraints(constraints)
+        .build()
+
+WorkManager.getInstance().enqueueUniquePeriodicWork(
+        RefreshDataWorker.WORK_NAME,
+        ExistingPeriodicWorkPolicy.REPLACE,
+        repeatingRequest
+)
+```
 
 ## Resources
 
@@ -67,4 +102,13 @@ Schedules the `WorkRequest` in a way that spreads out the load on system resourc
 - [`Room`](https://developer.android.com/jetpack/androidx/releases/room)
 - [Room annotations](https://developer.android.com/reference/android/arch/persistence/room/package-summary)
 - [`LiveData`](https://developer.android.com/reference/android/arch/lifecycle/LiveData.html)
-- [`Transformations.map`](https://developer.android.com/reference/android/arch/lifecycle/Transformations.html#map(android.arch.lifecycle.LiveData%3CX%3E,%20android.arch.core.util.Function%3CX,%20Y%3E))
+- [`Transformations.map`](https://developer.android.com/reference/androidx/lifecycle/Transformations#map(androidx.lifecycle.LiveData%3CX%3E,%20androidx.arch.core.util.Function%3CX,%20Y%3E))
+
+- [Defining Work Requests](https://developer.android.com/topic/libraries/architecture/workmanager/how-to/define-work)
+- [`WorkManager`](https://developer.android.com/reference/androidx/work/WorkManager)
+- [Getting started with `WorkManager`](https://developer.android.com/topic/libraries/architecture/workmanager/basics)
+- [Recurring work](https://developer.android.com/topic/libraries/architecture/workmanager/how-to/define-work#schedule_periodic_work)
+- [Guide to background processing](https://developer.android.com/guide/background)
+
+- [Introducing WorkManager](https://medium.com/androiddevelopers/introducing-workmanager-2083bcfc4712)
+- [WorkManager Basics](https://medium.com/androiddevelopers/workmanager-basics-beba51e94048)
